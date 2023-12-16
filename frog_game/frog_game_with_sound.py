@@ -267,10 +267,10 @@ while running:
         screen.blit(log_imgs[val["log_img_idx"]],(val["log_x_pos"],val["log_y_pos"]))
 
     screen.blit(character,(character_x_pos,character_y_pos))
-    lives = game_font.render("lives :" + "\\\\\\ "*life, True,(255,0,0))
+    lives = game_font.render("lives :" + "I "*life, True,(255,0,0))
     screen.blit(lives,(10,10))
     elapsed_time = (pygame.time.get_ticks()-start_ticks) / 1000
-    timer = game_font.render("time :"+"\\"*int((total_time - elapsed_time)/2), True,(0,255,0))
+    timer = game_font.render("time :"+"I"*int((total_time - elapsed_time)/2), True,(0,255,0))
     screen.blit(timer,(235,10))
     round_msg= game_font.render("round {}".format(int(round)), True,(255,255,0))
     round_msg_rect = round_msg.get_rect(center = (int(screen_width/2),int(screen_height/2)))
