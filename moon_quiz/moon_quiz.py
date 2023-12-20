@@ -37,8 +37,9 @@ hand = pygame.image.load(os.path.join(image_path,"hand.png"))   #힌트
 hand_x_pos = random.randint(0,540)
 hand_y_pos = random.randint(0,380)
 
-hand_sound = pygame.mixer.Sound(os.path.join(music_path,"999D09405CF43CF616.mp3"))
 
+hand_sound = pygame.mixer.Sound(os.path.join(music_path,"999D09405CF43CF616.mp3"))
+hand_sound.set_volume(0.3)
 moons = []
 
 moon_images = [pygame.image.load(os.path.join(image_path, "moon1w.png")),           #달 그림들
@@ -68,7 +69,7 @@ start_ticks = pygame.time.get_ticks() # 시작 시간 정의
 
 
 
-pygame.mixer.music.load(os.path.join(music_path,"mysterious-forest-creepy-lofi-halloween-lofi-halloween-music-168238.mp3"))
+pygame.mixer.music.load(os.path.join(music_path,"dramatic-atmosphere-with-piano-and-violin-143149.mp3"))
 pygame.mixer.music.play(-1)
 
 running = True
@@ -134,10 +135,10 @@ while running:
     elapsed_time = (pygame.time.get_ticks()-start_ticks) / 1000
     timer = game_font.render("Time : {}".format(int(total_time - elapsed_time)), True,(255,255,255))
     screen.blit(timer,(500,10))
-    if int(elapsed_time)%15== 0:
+    if int(elapsed_time)%20== 0 and int(elapsed_time)>=20:
         hand_sound.play()
         screen.blit(hand,(hand_x_pos,hand_y_pos))
-    if int(elapsed_time)%15== 1:
+    if int(elapsed_time)%20== 1 and int(elapsed_time)>=20:
         hand_x_pos = random.randint(0,540)
         hand_y_pos = random.randint(0,380)
     
