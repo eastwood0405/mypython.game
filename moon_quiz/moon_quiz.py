@@ -24,13 +24,20 @@ clock = pygame.time.Clock()
 #1. 사용제 기임 초기화 (배경 화면, 게임 이미지 , 좌표,속도, 폰트 등)
 current_path = os.path.dirname(__file__) #  현재 파일의 위치 반환
 image_path = os.path.join(current_path, "images") # images 폴더 반환
-
+music_path = os.path.join(current_path,"music")
 # 배경 만들기
 background = pygame.image.load(os.path.join(image_path, "background.png"))      #배경
 
 hint = pygame.image.load(os.path.join(image_path,"hint.png"))   #힌트
 hint_x_pos = 0
 hint_y_pos = 0
+
+
+hand = pygame.image.load(os.path.join(image_path,"hand.png"))   #힌트
+hand_x_pos = random.randint(0,540)
+hand_y_pos = random.randint(0,380)
+
+hand_sound = pygame.mixer.Sound(os.path.join(music_path,"999D09405CF43CF616.mp3"))
 
 moons = []
 
@@ -60,6 +67,9 @@ start_ticks = pygame.time.get_ticks() # 시작 시간 정의
 
 
 
+
+pygame.mixer.music.load(os.path.join(music_path,"mysterious-forest-creepy-lofi-halloween-lofi-halloween-music-168238.mp3"))
+pygame.mixer.music.play(-1)
 
 running = True
 while running:
@@ -124,13 +134,19 @@ while running:
     elapsed_time = (pygame.time.get_ticks()-start_ticks) / 1000
     timer = game_font.render("Time : {}".format(int(total_time - elapsed_time)), True,(255,255,255))
     screen.blit(timer,(500,10))
-
+    if int(elapsed_time)%15== 0:
+        hand_sound.play()
+        screen.blit(hand,(hand_x_pos,hand_y_pos))
+    if int(elapsed_time)%15== 1:
+        hand_x_pos = random.randint(0,540)
+        hand_y_pos = random.randint(0,380)
+    
     if total_time - elapsed_time <=0:
         game_result = "Time Over"
         running = False
     pygame.display.update()
 # pygame 종료
-
+pygame.mixer.music.stop()
 
 msg2 = game_font2.render(game_result, True,(255,255,255))#노란색
 msg_rect2 = msg2.get_rect(center = (int(screen_width/2),int(screen_height/2)))
