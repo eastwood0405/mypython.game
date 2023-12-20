@@ -84,13 +84,13 @@ while running:
                     val["moon_img_idx"]+=1
                     if val["moon_img_idx"] >7:
                         val["moon_img_idx"] = 0
-            hint_rect = hint.get_rect()
+            hint_rect = hint.get_rect()#힌트를 눌렀는지 확인
             hint_rect.left = hint_x_pos
             hint_rect.top = hint_y_pos
 
 
             
-            if hint_rect.collidepoint(event.pos):
+            if hint_rect.collidepoint(event.pos):#힌트를 보여줌
                     hint = pygame.image.load(os.path.join(image_path,"hint_result.png"))
                     use_hint = 1
                     
@@ -120,7 +120,7 @@ while running:
     msg = game_font.render(text, True,(255,255,255))
     msg_rect = msg.get_rect(center = (int(screen_width/2),int(screen_height/2-80)))
     screen.blit(msg,msg_rect)
-    screen.blit(hint,(hint_x_pos,hint_y_pos))
+    screen.blit(hint,(hint_x_pos,hint_y_pos))#힌트 그리기(삭제해도 가능)
     elapsed_time = (pygame.time.get_ticks()-start_ticks) / 1000
     timer = game_font.render("Time : {}".format(int(total_time - elapsed_time)), True,(255,255,255))
     screen.blit(timer,(500,10))
@@ -136,7 +136,7 @@ msg2 = game_font2.render(game_result, True,(255,255,255))#노란색
 msg_rect2 = msg2.get_rect(center = (int(screen_width/2),int(screen_height/2)))
 screen.blit(msg2,msg_rect2)
 
-if use_hint == 1:
+if use_hint == 1:#힌트를 썼으면 보여주는 내용
     msg3 = game_font.render("you used a hint", True,(255,255,255))#노란색
     msg_rect3 = msg3.get_rect(center = (int(screen_width/2),int(screen_height/2+80)))
     screen.blit(msg3,msg_rect3)
