@@ -24,7 +24,7 @@ clock = pygame.time.Clock()
 #1. 사용제 기임 초기화 (배경 화면, 게임 이미지 , 좌표,속도, 폰트 등)
 current_path = os.path.dirname(__file__) #  현재 파일의 위치 반환
 image_path = os.path.join(current_path, "images") # images 폴더 반환
-
+music_path = os.path.join(current_path,"music")
 # 배경 만들기
 background = pygame.image.load(os.path.join(image_path, "background.png"))      #배경
 
@@ -32,6 +32,14 @@ hint = pygame.image.load(os.path.join(image_path,"hint.png"))   #힌트
 hint_x_pos = 0
 hint_y_pos = 0
 
+
+hand = pygame.image.load(os.path.join(image_path,"hand.png"))   #힌트
+hand_x_pos = random.randint(0,540)
+hand_y_pos = random.randint(0,380)
+
+
+hand_sound = pygame.mixer.Sound(os.path.join(music_path,"999D09405CF43CF616.mp3"))
+hand_sound.set_volume(0.3)
 moons = []
 
 moon_images = [pygame.image.load(os.path.join(image_path, "moon1w.png")),           #달 그림들
@@ -61,6 +69,9 @@ start_ticks = pygame.time.get_ticks() # 시작 시간 정의
 
 
 
+pygame.mixer.music.load(os.path.join(music_path,"dramatic-atmosphere-with-piano-and-violin-143149.mp3"))
+pygame.mixer.music.play(-1)
+
 running = True
 while running:
     dt = clock.tick(30)#게임화면의 초당 프레임 수
@@ -84,13 +95,13 @@ while running:
                     val["moon_img_idx"]+=1
                     if val["moon_img_idx"] >7:
                         val["moon_img_idx"] = 0
-            hint_rect = hint.get_rect()
+            hint_rect = hint.get_rect()#힌트를 눌렀는지 확인
             hint_rect.left = hint_x_pos
             hint_rect.top = hint_y_pos
 
 
             
-            if hint_rect.collidepoint(event.pos):
+            if hint_rect.collidepoint(event.pos):#힌트를 보여줌
                     hint = pygame.image.load(os.path.join(image_path,"hint_result.png"))
                     use_hint = 1
                     
@@ -119,11 +130,17 @@ while running:
     msg = game_font.render(text, True,(255,255,255))
     msg_rect = msg.get_rect(center = (int(screen_width/2),int(screen_height/2-80)))
     screen.blit(msg,msg_rect)
-    screen.blit(hint,(hint_x_pos,hint_y_pos))
+    screen.blit(hint,(hint_x_pos,hint_y_pos))#힌트 그리기(삭제해도 가능)
     elapsed_time = (pygame.time.get_ticks()-start_ticks) / 1000
     timer = game_font.render("Time : {}".format(int(total_time - elapsed_time)), True,(255,255,255))
     screen.blit(timer,(500,10))
-
+    if int(elapsed_time)%20== 0 and int(elapsed_time)>=20:
+        hand_sound.play()
+        screen.blit(hand,(hand_x_pos,hand_y_pos))
+    if int(elapsed_time)%20== 1 and int(elapsed_time)>=20:
+        hand_x_pos = random.randint(0,540)
+        hand_y_pos = random.randint(0,380)
+    
     if total_time - elapsed_time <=0:
         game_result = "Time Over"
         running = False
@@ -133,8 +150,7 @@ while running:
         screen.blit(msg2,msg_rect2)
     pygame.display.update()
 # pygame 종료
-
-
+pygame.mixer.music.stop()
 
 
 

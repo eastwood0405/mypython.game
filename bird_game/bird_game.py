@@ -19,9 +19,9 @@ start_ticks = pygame.time.get_ticks()
 current_path = os.path.dirname(__file__)
 
 images_path = os.path.join(current_path,"images")
-
+                                                                    
 background = pygame.image.load(os.path.join(images_path,"background.png"))
-
+                                                                                                                                     
 stage = pygame.image.load(os.path.join(images_path,"stage.png"))
 stage_size = stage.get_rect().size
 stage_height = stage_size[1]
