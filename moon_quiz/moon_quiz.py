@@ -102,8 +102,7 @@ while running:
             break
         if x !=3:
             continue
-        running = False
-        game_result = "succes"#성공시 출력 메세지(수정 가능)
+        game_result = "4763"#성공시 출력 메세지(수정 가능)
 
 
     #4.충돌 처리
@@ -128,21 +127,17 @@ while running:
     if total_time - elapsed_time <=0:
         game_result = "Time Over"
         running = False
+    if game_result == "4763":
+        msg2 = game_font2.render(game_result, True,(255,255,255))#노란색
+        msg_rect2 = msg2.get_rect(center = (int(screen_width/2),int(screen_height/2)))
+        screen.blit(msg2,msg_rect2)
     pygame.display.update()
 # pygame 종료
 
 
-msg2 = game_font2.render(game_result, True,(255,255,255))#노란색
-msg_rect2 = msg2.get_rect(center = (int(screen_width/2),int(screen_height/2)))
-screen.blit(msg2,msg_rect2)
-
-if use_hint == 1:
-    msg3 = game_font.render("you used a hint", True,(255,255,255))#노란색
-    msg_rect3 = msg3.get_rect(center = (int(screen_width/2),int(screen_height/2+80)))
-    screen.blit(msg3,msg_rect3)
 
 
 pygame.display.update()
 
-pygame.time.delay(2000)
+
 pygame.quit()
