@@ -137,7 +137,7 @@ while running:
     if int(elapsed_time)%20== 0 and int(elapsed_time)>=20:
         if game_result != "4763":
             hand_sound.play()
-        screen.blit(hand,(hand_x_pos,hand_y_pos))
+            screen.blit(hand,(hand_x_pos,hand_y_pos))
     if int(elapsed_time)%20== 1 and int(elapsed_time)>=20:
         hand_x_pos = random.randint(0,540)
         hand_y_pos = random.randint(0,380)
@@ -149,8 +149,6 @@ while running:
         msg2 = game_font2.render(game_result, True,(255,255,255))#노란색
         msg_rect2 = msg2.get_rect(center = (int(screen_width/2),int(screen_height/2)))
         screen.blit(msg2,msg_rect2)
-        hand_x_pos = 700
-        hand_y_pos = 900
     pygame.display.update()
 # pygame 종료
 pygame.mixer.music.stop()
