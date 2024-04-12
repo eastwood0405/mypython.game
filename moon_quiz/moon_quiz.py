@@ -61,7 +61,7 @@ for x in range(1,5):
 
 use_hint = 0
 
-total_time =100
+total_time =10000000
 start_ticks = pygame.time.get_ticks() # 시작 시간 정의
 
 
@@ -113,7 +113,7 @@ while running:
             break
         if x !=3:
             continue
-        game_result = "password 4763"#성공시 출력 메세지(수정 가능)
+        game_result = "password 476"#성공시 출력 메세지(수정 가능)
 
 
     #4.충돌 처리
