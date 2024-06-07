@@ -90,6 +90,4 @@ pygame.display.update()
 
 
 pygame.quit()                 
-print(background.get_size())
-print(character.get_size())
-print(stage .get_size())
+

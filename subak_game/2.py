@@ -29,7 +29,7 @@ background = pygame.image.load(os.path.join(image_path, "background.png"))
 
 fruits = []
 for x in range(3):
-    fruits.append({"x_pos":0,"y_pos":0,"width":40+5*x,"height":40+5*x,"bouncement":x+1,"img_idx":x,"is_fallen":False,"to_y":0})
+    fruits.append({"x_pos":0,"y_pos":0,"width":40+5*x,"height":40+5*x,"bouncement":x+1,"img_idx":x,"is_fallen":False,"to_y":0,"is_screen_blit":False})
 fruts_image = []
 for x in range(1,12): 
     fruts_image.append(pygame.image.load(os.path.join(image_path, f"fruit{x}.png")))
@@ -49,6 +49,16 @@ def Not_fallen_list_update():
             continue
         fallen_fruits.append(val)
         del fruits[idx]
+def is_fallen_update():
+        for idx, val in enumerate(fruits):
+            if idx == fruit_idx:
+                continue
+            if val["is_screen_blit"] == False:
+                continue
+
+            if val["y_pos"]  < screen_height- val["height"]:
+                val["is_fallen"] = False
+
 
 running = True
 while running:
@@ -76,30 +86,47 @@ while running:
 
 
     # 3. 게임 캐릭터 위치 정의 
+    fruits[fruit_idx]["x_pos"] += to_x
+    fruits[fruit_idx]["y_pos"] += to_y
+    if fruits[fruit_idx]["x_pos"] <= 0:
+        fruits[fruit_idx]["x_pos"] = 0
+    if fruits[fruit_idx]["x_pos"] >= screen_width - fruits[fruit_idx]["width"]:
+        fruits[fruit_idx]["x_pos"] = screen_width - fruits[fruit_idx]["width"]
+    if fruits[fruit_idx]["y_pos"] >= screen_height- fruits[fruit_idx]["height"]:
+        fruits[fruit_idx]["y_pos"] = screen_height- fruits[fruit_idx]["height"]
+        to_y = 0
+        falling = False
+
+
+            
+        fruits[fruit_idx]["is_fallen"] = True
+        Not_fallen_list_update()
+        fruits.append({"x_pos":0,"y_pos":0,"width":fruits[fruit_idx]["width"],"height":fruits[fruit_idx]["height"],
+            "bouncement":fruits[fruit_idx]["bouncement"],"img_idx":fruits[fruit_idx]["img_idx"],"is_fallen":False,"to_y":0,"is_screen_blit":False})
+        fruit_idx = random.randrange(0,len(fruits)-1)
+    is_fallen_update()
+
+
     for idx, val in enumerate(fruits):
-        if idx != fruit_idx:
+
+        if idx == fruit_idx:
+            continue
+        if val["is_screen_blit"] == False:
             continue
         if val["is_fallen"] == True:
             continue
+        val["to_y"] = val["to_y"] +0.5
+        val["y_pos"] = val["y_pos"] + val["to_y"]
 
-        val["x_pos"] += to_x
-        val["y_pos"] += to_y
-        if val["x_pos"] <= 0:
-            val["x_pos"] = 0
-        if val["x_pos"] >= screen_width - val["width"]:
-            val["x_pos"] = screen_width - val["width"]
+
         if val["y_pos"] >= screen_height- val["height"]:
             val["y_pos"] = screen_height- val["height"]
-            to_y = 0
-            falling = False
+            val["to_y"] = 0
 
 
             
             val["is_fallen"] = True
             Not_fallen_list_update()
-            fruits.append({"x_pos":0,"y_pos":0,"width":val["width"],"height":val["height"],
-                "bouncement":val["bouncement"],"img_idx":val["img_idx"],"is_fallen":False})
-            fruit_idx = random.randrange(0,len(fruits)-1)
 
 
 
@@ -119,25 +146,22 @@ while running:
             if fruit_rect.colliderect(fallen_fruit_rect):
                 to_y = 0
                 falling = False
-                print(val["img_idx"],v["img_idx"])
 
 
                 if val["img_idx"] == v["img_idx"]:
-                    print(val["img_idx"],v["img_idx"])
                     val["img_idx"] += 1
                     val["y_pos"] = v["y_pos"]
                     val["is_fallen"] = True
-                    Not_fallen_list_update()
                     fallen_fruits.remove(v)
-                    if val ["y_pos"]  < screen_height- val["height"]:
-                        val["is_fallen"] = False
+
+                    Not_fallen_list_update()
                         
 
                 else:
                     val["y_pos"] = v["y_pos"] - val["height"]
                     val["is_fallen"] = True
                     Not_fallen_list_update()
-                fruits.append({"x_pos":0,"y_pos":0,"width":val["width"],"height":val["height"],"bouncement":val["bouncement"],"img_idx":val["img_idx"],"is_fallen":False})
+                fruits.append({"x_pos":0,"y_pos":0,"width":val["width"],"height":val["height"],"bouncement":val["bouncement"],"img_idx":val["img_idx"],"is_fallen":False,"to_y":0,"is_screen_blit":False})
                 fruit_idx = random.randrange(0,len(fruits)-1)
                 break
     
@@ -158,7 +182,7 @@ while running:
     #5.화면에 그리기
     screen.blit(background,(0,0))
     for idx, val in enumerate(fruits):
-        if idx == fruit_idx :
+        if val["is_screen_blit"] == True or idx == fruit_idx:
             screen.blit(fruts_image[val["img_idx"]],(val["x_pos"],val["y_pos"]))
     for idx, val in enumerate(fallen_fruits):
         screen.blit(fruts_image[val["img_idx"]],(val["x_pos"],val["y_pos"]))
