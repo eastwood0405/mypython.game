@@ -12,7 +12,7 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 
 
 # 화면 타이틀 설정
-pygame.display.set_caption("게임 이름") # 게임 이름 
+pygame.display.set_caption("핑퐁 게임") # 게임 이름 
 
 #FPS
 clock = pygame.time.Clock()
@@ -35,6 +35,7 @@ gukhim_y_pos = screen_height/2-gukhim_height/2
 
 gukhim_to_y = 0
 
+game_font = pygame.font.Font(None, 40)
 
 minjudang= pygame.image.load(os.path.join(images_path,"minjudang.png"))
 minjudang_size = minjudang.get_rect().size  
@@ -55,9 +56,17 @@ ball_y_pos = screen_height/2-ball_height/2
 ball_to_x = 10
 ball_to_y = 10
 
+def ball_speed_up():
+    global ball_to_x
+    global ball_to_y
+    ball_to_x *= 1.05
+    ball_to_y *= 1.05
+gukhim_point = 0
+minjudang_point = 0
 
+music_path = os.path.join(current_path,"music")
+hop_sound = pygame.mixer.Sound(os.path.join(music_path,"sound-frogger-hop.wav"))
 
- 
 running = True
 while running:
     dt = clock.tick(30)#게임화면의 초당 프레임 수
@@ -116,18 +125,53 @@ while running:
     minjudang_rect.top = minjudang_y_pos
     if ball_rect.colliderect(gukhim_rect):
         ball_to_x *= -1
-        ball_to_y *= -1
+        ball_speed_up()
+        hop_sound.play()
     elif ball_rect.colliderect(minjudang_rect):
         ball_to_x *= -1
+        ball_speed_up()
+        hop_sound.play()
+
+    if ball_y_pos <= 0:
         ball_to_y *= -1
+        ball_speed_up()
+        hop_sound.play()
+    if ball_y_pos >= screen_height - ball_height:
+        ball_to_y *= -1
+        ball_speed_up()
+        hop_sound.play()
+    
+    if ball_x_pos <= 0 :
+        minjudang_point += 1
+        ball_x_pos = screen_width/2 -ball_width/2
+        ball_y_pos = screen_height/2-ball_height/2
+
+        ball_to_x = 10
+        ball_to_y = 10
+
+    if ball_x_pos >= screen_width -ball_width:
+        gukhim_point += 1
+        ball_x_pos = screen_width/2 -ball_width/2
+        ball_y_pos = screen_height/2-ball_height/2
+
+        ball_to_x = 10
+        ball_to_y = 10
 
 
 
-    #5.화면에 그리기
+
+    #5.화면에 그리기s
     screen.blit(background,(0,0))
     screen.blit(gukhim,(gukhim_x_pos,gukhim_y_pos))
     screen.blit(minjudang,(minjudang_x_pos,minjudang_y_pos))
     screen.blit(ball,(ball_x_pos,ball_y_pos))
+    text = f"{gukhim_point}:{minjudang_point}"
+    msg = game_font.render(text, True,(255,255,255))#노란색
+    msg_rect = msg.get_rect(center = (int(screen_width/2),int(20)))
+    screen.blit(msg,msg_rect)
     pygame.display.update()
+    if ball_x_pos == screen_width/2 -ball_width/2:
+        pygame.time.delay(2000)
+
 # pygame 종료
 pygame.quit()   
